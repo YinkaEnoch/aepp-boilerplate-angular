@@ -1,3 +1,7 @@
 export const environment = {
-  production: true
+  production: true,
+  nodeName: 'ae_mainnet',
+  nodeUrl: 'https://mainnet.aeternity.io',
+  nodeInternalUrl: 'https://mainnet.aeternity.io/mdw',
+  nodeCompilerUrl: 'https://compiler.aepps.com',
 };

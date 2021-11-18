@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { RpcAepp, Node } from '@aeternity/aepp-sdk';
 import Detector from '@aeternity/aepp-sdk/es/utils/aepp-wallet-communication/wallet-detector';
 import BrowserWindowMessageConnection from '@aeternity/aepp-sdk/es/utils/aepp-wallet-communication/connection/browser-window-message';
+import { environment } from 'src/environments/environment';
+const { nodeName, nodeUrl, nodeInternalUrl, nodeCompilerUrl } = environment;
 
 @Injectable({
   providedIn: 'root',
@@ -14,18 +16,18 @@ export class AeternityService {
       const node = {
         nodes: [
           {
-            name: 'aepp-angular',
+            name: nodeName,
             instance: await Node({
-              url: 'https://testnet.aeternity.io',
-              internalUrl: 'https://testnet.aeternity.io/mdw',
+              url: nodeUrl,
+              internalUrl: nodeInternalUrl,
             }),
           },
         ],
-        compilerUrl: 'https://compiler.aepps.com',
+        compilerUrl: nodeCompilerUrl,
       };
 
       const sdk = await RpcAepp({
-        name: 'aepp-angular',
+        name: nodeName,
         ...node,
       });
 
