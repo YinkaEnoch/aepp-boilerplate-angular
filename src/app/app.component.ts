@@ -9,8 +9,6 @@ import { AeternityService } from './services/aeternity.service';
 export class AppComponent {
   title = 'aepp-boilerplate-angular';
   sdk: any;
-  userBalance: any;
-  userAddress: any;
 
   constructor(private aeService: AeternityService) {
     aeService.initSDK().then(async (res) => {
