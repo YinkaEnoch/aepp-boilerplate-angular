@@ -18,6 +18,7 @@ export class AppComponent {
       const balance = await this.sdk.balance(address);
 
       console.log({ address, balance });
+      console.log(this.sdk.rpcClient.info);
     });
   }
 }

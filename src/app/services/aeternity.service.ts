@@ -29,6 +29,9 @@ export class AeternityService {
       const sdk = await RpcAepp({
         name: nodeName,
         ...node,
+        onNetworkChange: async (params: any) => {
+          sdk.selectNode(params.networkId);
+        },
       });
 
       await this.scanForWallet(sdk);
@@ -53,13 +56,11 @@ export class AeternityService {
       detector.scan(async ({ newWallet }) => {
         if (!newWallet) return;
 
-        if (window.confirm(`Connect to ${newWallet.name} wallet?`)) {
-          await sdk?.connectToWallet(await newWallet.getConnection());
-          await sdk?.subscribeAddress('subscribe', 'current');
+        await sdk?.connectToWallet(await newWallet.getConnection());
+        await sdk?.subscribeAddress('subscribe', 'current');
 
-          detector.stopScan();
-          resolve(true);
-        }
+        detector.stopScan();
+        resolve(true);
       });
     });
   }

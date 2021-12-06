@@ -459,6 +459,16 @@
   </div>
 </div>
 
+<section class="node-info" [ngStyle]="{ 'text-align': 'center' }">
+  <div *ngIf="sdk; else elseBlock">
+    <p>Connected :)</p>
+    <p>Check log for more info</p>
+  </div>
+  <ng-template #elseBlock>
+    <p>Connecting to node...</p>
+  </ng-template>
+</section>
+
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
