@@ -460,9 +460,16 @@
 </div>
 
 <section class="node-info" [ngStyle]="{ 'text-align': 'center' }">
-  <div *ngIf="sdk; else elseBlock">
+  <div *ngIf="resObj.address; else elseBlock">
     <p>Connected :)</p>
-    <p>Check log for more info</p>
+    <br />
+    <p><strong>Current block height: </strong> {{ resObj.height }}</p>
+    <br />
+    <p><strong>You are connected to: </strong> {{ resObj.nodeUrl }}</p>
+    <br />
+    <p><strong>Wallet Address: </strong>{{ resObj.address }}</p>
+    <br />
+    <p><strong>Balance: </strong> {{ resObj.balance }}</p>
   </div>
   <ng-template #elseBlock>
     <p>Connecting to node...</p>

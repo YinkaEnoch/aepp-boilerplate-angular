@@ -4,4 +4,5 @@ export const environment = {
   nodeUrl: 'https://mainnet.aeternity.io',
   nodeInternalUrl: 'https://mainnet.aeternity.io/mdw',
   nodeCompilerUrl: 'https://compiler.aepps.com',
+  projectName: 'NG Boiler Plate',
 };
