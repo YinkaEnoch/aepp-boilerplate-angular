@@ -460,7 +460,13 @@
 </div>
 
 <section class="node-info" [ngStyle]="{ 'text-align': 'center' }">
-  <div *ngIf="resObj.address; else elseBlock">
+  <div *ngIf="status === WalletConnectionStatus.Error">
+    <p *ngIf="resObj.error"> {{ resObj.error }}</p>
+  </div>
+  <div *ngIf="status === WalletConnectionStatus.Connecting">
+    <p else>Connecting to node...</p>
+  </div>
+  <div *ngIf="status === WalletConnectionStatus.Connected;">
     <p>Connected :)</p>
     <br />
     <p><strong>Current block height: </strong> {{ resObj.height }}</p>
@@ -471,9 +477,6 @@
     <br />
     <p><strong>Balance: </strong> {{ resObj.balance }}</p>
   </div>
-  <ng-template #elseBlock>
-    <p>Connecting to node...</p>
-  </ng-template>
 </section>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

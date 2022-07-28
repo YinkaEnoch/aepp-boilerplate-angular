@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  nodeName: 'ae_uat',
+  networkId: 'ae_uat',
   nodeUrl: 'https://testnet.aeternity.io',
-  nodeInternalUrl: 'https://testnet.aeternity.io/mdw',
   nodeCompilerUrl: 'https://compiler.aepps.com',
   projectName: 'NG Boiler Plate',
 };
