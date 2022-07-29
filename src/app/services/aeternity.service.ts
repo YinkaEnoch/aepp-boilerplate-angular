@@ -4,6 +4,7 @@ import {
   Node,
   walletDetector,
   BrowserWindowMessageConnection,
+  SUBSCRIPTION_TYPES,
 } from '@aeternity/aepp-sdk';
 import { environment } from 'src/environments/environment';
 const { projectName, networkId, nodeUrl, nodeCompilerUrl } =
@@ -13,7 +14,7 @@ const { projectName, networkId, nodeUrl, nodeCompilerUrl } =
   providedIn: 'root',
 })
 export class AeternityService {
-  aeSdk: any;
+  aeSdk?: AeSdkAepp;
 
   constructor() { }
 
@@ -43,8 +44,8 @@ export class AeternityService {
       if (!this.aeSdk) throw new Error('Failed! SDK not initialized.');
       const handleNewWallet = async ({ wallets, newWallet } : any) => {
         newWallet = newWallet || Object.values(wallets)[0]
-        await this.aeSdk.connectToWallet(await newWallet.getConnection());
-        await this.aeSdk.subscribeAddress('subscribe', 'current');
+        await this.aeSdk!.connectToWallet(await newWallet.getConnection());
+        await this.aeSdk!.subscribeAddress(SUBSCRIPTION_TYPES.subscribe, 'current');
         stopScan();
         resolve(newWallet.info.networkId);
       };
