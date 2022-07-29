@@ -464,7 +464,7 @@
     <p *ngIf="resObj.error"> {{ resObj.error }}</p>
   </div>
   <div *ngIf="status === WalletConnectionStatus.Connecting">
-    <p else>Connecting to node...</p>
+    <p else>Searching for wallet ...</p>
   </div>
   <div *ngIf="status === WalletConnectionStatus.Connected;">
     <p>Connected :)</p>

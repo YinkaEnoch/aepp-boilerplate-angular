@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
+    "start:testnet": "ng serve -o --configuration development",
+    "start:mainnet": "ng serve -o --configuration production",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -18,7 +20,7 @@
     "aepp-boilerplate-angular"
   ],
   "dependencies": {
-    "@aeternity/aepp-sdk": "github:aeternity/aepp-sdk-js#feature/fixes",
+    "@aeternity/aepp-sdk": "12.1.1",
     "@angular/animations": "~14.1.0",
     "@angular/common": "~14.1.0",
     "@angular/compiler": "~14.1.0",

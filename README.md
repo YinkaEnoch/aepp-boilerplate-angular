@@ -1,27 +1,49 @@
-# AeppBoilerplateAngular
+# Aepp Angular Boilerplate
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.1.
+This boilerplate is designed to allow everyone an easy start when building an aepp on 
+top of the aeternity eco system. It contains two critical parts:
 
-## Development server
+- Easy wallet discovery
+- The [aeternity js-sdk](https://github.com/aeternity/aepp-sdk-js) instance
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Get started
 
-## Code scaffolding
+Clone repo via git or use the template button above.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Install the dependencies
 
-## Build
+```bash
+npm install
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Start the dev server
 
-## Running unit tests
+testnet
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm run start:testnet
+```
 
-## Running end-to-end tests
+mainnet
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+npm run start:mainnet
+```
 
-## Further help
+### build
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm run build
+```
+
+## Browser Extension Wallets
+
+### Superhero wallet
+
+[Chromium](https://chrome.google.com/webstore/detail/superhero/mnhmmkepfddpifjkamaligfeemcbhdne)
+
+[Firefox](https://addons.mozilla.org/en-US/firefox/addon/superhero-wallet/)
+
+### Build Extension from code
+
+[wallet-web-extension](https://github.com/aeternity/aepp-sdk-js/tree/develop/examples/browser/wallet-web-extension)
