@@ -1,67 +1,57 @@
 import { Injectable } from '@angular/core';
 import {
-  RpcAepp,
+  AeSdkAepp,
   Node,
-  WalletDetector,
+  walletDetector,
   BrowserWindowMessageConnection,
+  SUBSCRIPTION_TYPES,
 } from '@aeternity/aepp-sdk';
 import { environment } from 'src/environments/environment';
-const { projectName, nodeName, nodeUrl, nodeInternalUrl, nodeCompilerUrl } =
+const { projectName, networkId, nodeUrl, nodeCompilerUrl } =
   environment;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AeternityService {
-  sdk: any;
-  detector;
+  aeSdk?: AeSdkAepp;
 
-  constructor() {}
+  constructor() { }
 
-  async initSDK() {
-    this.sdk = await RpcAepp({
+  async initSDK(onNetworkChange: any) {
+    this.aeSdk = new AeSdkAepp({
       name: projectName,
       nodes: [
         {
-          name: nodeName,
-          instance: await Node({
-            url: nodeUrl,
-            internalUrl: nodeInternalUrl,
-          }),
+          name: networkId,
+          instance: new Node(nodeUrl),
         },
       ],
       compilerUrl: nodeCompilerUrl,
-      onNetworkChange: async (params: any) => {
-        this.sdk.selectNode(params.networkId);
-      },
+      onAddressChange:  ({ current }) => console.log('new address'),
+      onNetworkChange,
       onDisconnect: () => {
         return new Error('Disconnected');
       },
     });
 
-    await this.scanForWallet();
-    return this.sdk;
+    const walletNetworkId: string = await this.scanForWallet();
+    return { walletNetworkId, aeSdk: this.aeSdk};
   }
 
-  async scanForWallet() {
-    if (!this.sdk) throw new Error('Failed! SDK not initialized.');
-
-    const scannerConnection = await BrowserWindowMessageConnection({
-      connectionInfo: { id: 'spy' },
-    });
-
-    const detector = await WalletDetector({ connection: scannerConnection });
-
+  async scanForWallet(): Promise<string> {
     return new Promise((resolve) => {
-      detector.scan(async ({ wallets, newWallet }) => {
-        newWallet = newWallet || Object.values(wallets)[0];
-
-        await this.sdk.connectToWallet(await newWallet.getConnection());
-        await this.sdk?.subscribeAddress('subscribe', 'current');
-
-        detector.stopScan();
-        resolve(true);
-      });
+      if (!this.aeSdk) throw new Error('Failed! SDK not initialized.');
+      const handleNewWallet = async ({ wallets, newWallet } : any) => {
+        newWallet = newWallet || Object.values(wallets)[0]
+        await this.aeSdk!.connectToWallet(await newWallet.getConnection());
+        await this.aeSdk!.subscribeAddress(SUBSCRIPTION_TYPES.subscribe, 'current');
+        stopScan();
+        resolve(newWallet.info.networkId);
+      };
+      const scannerConnection = new BrowserWindowMessageConnection();
+      const stopScan = walletDetector(scannerConnection, handleNewWallet.bind(this));
     });
   }
 }
+
