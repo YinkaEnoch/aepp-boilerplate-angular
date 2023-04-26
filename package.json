@@ -14,10 +14,10 @@
   "license": "ISC",
   "keywords": [
     "aeternity",
-    "aeternity-boilerplate",
-    "aeternity-boilerplate-angular",
-    "aepp-boilerplate",
-    "aepp-boilerplate-angular"
+    "blockchain",
+    "aepp",
+    "boilerplate",
+    "angular"
   ],
   "dependencies": {
     "@aeternity/aepp-sdk": "12.1.1",
