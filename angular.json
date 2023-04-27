@@ -17,6 +17,22 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "events",
+              "websocket",
+              "@aeternity/aepp-calldata",
+              "rlp",
+              "blakejs/blake2b.js",
+              "buffer",
+              "tweetnacl",
+              "tweetnacl-auth",
+              "varuint-bitcoin",
+              "bs58",
+              "sha.js/sha256.js",
+              "aes-js",
+              "bip32-path",
+              "@aeternity/argon2"
+            ],
             "outputPath": "dist/aepp-boilerplate-angular",
             "index": "src/index.html",
             "main": "src/main.ts",
