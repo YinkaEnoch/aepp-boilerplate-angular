@@ -23,7 +23,12 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/@aeternity/aepp-sdk/src/typings"
+    ],
+    "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

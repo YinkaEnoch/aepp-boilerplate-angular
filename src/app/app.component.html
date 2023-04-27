@@ -460,23 +460,20 @@
 </div>
 
 <section class="node-info" [ngStyle]="{ 'text-align': 'center' }">
-  <div *ngIf="status === WalletConnectionStatus.Error">
-    <p *ngIf="resObj.error"> {{ resObj.error }}</p>
+  <div *ngIf="statusMessage$ | async; else connected">
+    <p> {{ statusMessage$ | async }}</p>
   </div>
-  <div *ngIf="status === WalletConnectionStatus.Connecting">
-    <p else>Searching for wallet ...</p>
-  </div>
-  <div *ngIf="status === WalletConnectionStatus.Connected;">
+  <ng-template #connected>
     <p>Connected :)</p>
     <br />
-    <p><strong>Current block height: </strong> {{ resObj.height }}</p>
+    <p><strong>Current block height: </strong> {{ height$ | async }}</p>
     <br />
-    <p><strong>You are connected to: </strong> {{ resObj.nodeUrl }}</p>
+    <p><strong>You are connected to: </strong> {{ nodeUrl }}</p>
     <br />
-    <p><strong>Wallet Address: </strong>{{ resObj.address }}</p>
+    <p><strong>Wallet Address: </strong>{{ address$ | async }}</p>
     <br />
-    <p><strong>Balance: </strong> {{ resObj.balance }}</p>
-  </div>
+    <p><strong>Balance: </strong> {{ balance$ | async }}</p>
+  </ng-template>
 </section>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

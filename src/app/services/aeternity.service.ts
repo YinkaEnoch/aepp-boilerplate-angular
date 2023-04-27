@@ -6,52 +6,57 @@ import {
   BrowserWindowMessageConnection,
   SUBSCRIPTION_TYPES,
 } from '@aeternity/aepp-sdk';
+import { Encoded } from '@aeternity/aepp-sdk/es/utils/encoder';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-const { projectName, networkId, nodeUrl, nodeCompilerUrl } =
-  environment;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AeternityService {
-  aeSdk?: AeSdkAepp;
+  aeSdk: AeSdkAepp;
+  address$ = new BehaviorSubject<Encoded.AccountAddress | undefined>(undefined);
+  networkId$ = new BehaviorSubject<string | undefined>(undefined);
 
-  constructor() { }
-
-  async initSDK(onNetworkChange: any) {
+  constructor() {
     this.aeSdk = new AeSdkAepp({
-      name: projectName,
-      nodes: [
-        {
-          name: networkId,
-          instance: new Node(nodeUrl),
-        },
-      ],
-      compilerUrl: nodeCompilerUrl,
-      onAddressChange:  ({ current }) => console.log('new address'),
-      onNetworkChange,
-      onDisconnect: () => {
-        return new Error('Disconnected');
+      name: environment.projectName,
+      nodes: [{
+        name: environment.networkId,
+        instance: new Node(environment.nodeUrl)
+      }],
+      onAddressChange: ({ current }) => {
+        this.address$.next(Object.keys(current)[0] as Encoded.AccountAddress);
       },
+      onNetworkChange: ({ networkId }) => {
+        this.networkId$.next(networkId);
+      },
+      onDisconnect: () => console.log('Wallet disconnected'),
     });
-
-    const walletNetworkId: string = await this.scanForWallet();
-    return { walletNetworkId, aeSdk: this.aeSdk};
   }
 
-  async scanForWallet(): Promise<string> {
-    return new Promise((resolve) => {
-      if (!this.aeSdk) throw new Error('Failed! SDK not initialized.');
-      const handleNewWallet = async ({ wallets, newWallet } : any) => {
-        newWallet = newWallet || Object.values(wallets)[0]
-        await this.aeSdk!.connectToWallet(await newWallet.getConnection());
-        await this.aeSdk!.subscribeAddress(SUBSCRIPTION_TYPES.subscribe, 'current');
+  async connectToWallet(): Promise<void> {
+    type HandleWallets = Parameters<typeof walletDetector>[1];
+    // TODO: remove NonNullable after releasing https://github.com/aeternity/aepp-sdk-js/pull/1801
+    type Wallet = NonNullable<Parameters<HandleWallets>[0]['newWallet']>;
+
+    const wallet = await new Promise<Wallet>((resolve) => {
+      let stopScan: ReturnType<typeof walletDetector>;
+      const handleWallets: HandleWallets = async ({ wallets, newWallet }) => {
+        newWallet = newWallet || Object.values(wallets)[0];
         stopScan();
-        resolve(newWallet.info.networkId);
+        resolve(newWallet);
       };
       const scannerConnection = new BrowserWindowMessageConnection();
-      const stopScan = walletDetector(scannerConnection, handleNewWallet.bind(this));
+      stopScan = walletDetector(scannerConnection, handleWallets);
     });
+
+    const { networkId } = await this.aeSdk.connectToWallet(await wallet.getConnection());
+    // TODO: remove after switching to sdk@13
+    this.aeSdk.onNetworkChange({ networkId });
+    await this.aeSdk.subscribeAddress(SUBSCRIPTION_TYPES.subscribe, 'current');
+    const address = await this.aeSdk.address();
+    // TODO: remove after releasing https://github.com/aeternity/aepp-sdk-js/issues/1802
+    this.aeSdk.onAddressChange({ current: { [address]: {} }, connected: {} });
   }
 }
-
