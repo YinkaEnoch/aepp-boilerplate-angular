@@ -32,7 +32,7 @@ export class AppComponent {
       });
 
       this.height$ = aeService.networkId$.pipe(
-        switchMap(() => aeService.aeSdk.height()),
+        switchMap(() => aeService.aeSdk.getHeight()),
       );
 
       this.balance$ = combineLatest([aeService.address$, aeService.networkId$]).pipe(

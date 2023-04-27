@@ -4,9 +4,9 @@ import {
   Node,
   walletDetector,
   BrowserWindowMessageConnection,
+  Encoded,
   SUBSCRIPTION_TYPES,
 } from '@aeternity/aepp-sdk';
-import { Encoded } from '@aeternity/aepp-sdk/es/utils/encoder';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -51,12 +51,9 @@ export class AeternityService {
       stopScan = walletDetector(scannerConnection, handleWallets);
     });
 
-    const { networkId } = await this.aeSdk.connectToWallet(await wallet.getConnection());
-    // TODO: remove after switching to sdk@13
-    this.aeSdk.onNetworkChange({ networkId });
+    await this.aeSdk.connectToWallet(await wallet.getConnection());
     await this.aeSdk.subscribeAddress(SUBSCRIPTION_TYPES.subscribe, 'current');
-    const address = await this.aeSdk.address();
     // TODO: remove after releasing https://github.com/aeternity/aepp-sdk-js/issues/1802
-    this.aeSdk.onAddressChange({ current: { [address]: {} }, connected: {} });
+    this.aeSdk.onAddressChange({ current: { [this.aeSdk.address]: {} }, connected: {} });
   }
 }
